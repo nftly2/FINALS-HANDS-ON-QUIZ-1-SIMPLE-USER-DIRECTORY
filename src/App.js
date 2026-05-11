@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -17,7 +18,6 @@ function App() {
         }
 
         const data = await response.json();
-
         setUsers(data.slice(0, 5));
       } catch (err) {
         setError("Failed to fetch users.");
@@ -29,22 +29,43 @@ function App() {
     fetchUsers();
   }, []);
 
-  if (loading) return <h2>Loading users...</h2>;
+  if (loading)
+    return (
+      <div className="message">
+        <h2>Loading users...</h2>
+      </div>
+    );
 
-  if (error) return <h2>{error}</h2>;
+  if (error)
+    return (
+      <div className="message">
+        <h2>{error}</h2>
+      </div>
+    );
 
   return (
-    <div>
-      <h1>User List</h1>
+    <div className="container">
+      <h1 className="title">User List</h1>
 
-      {users.map((user) => (
-        <div key={user.id}>
-          <h3>{user.name}</h3>
-          <p>Email: {user.email}</p>
-          <p>Company: {user.company.name}</p>
-          <hr />
-        </div>
-      ))}
+      <div className="users-grid">
+        {users.map((user) => (
+          <div key={user.id} className="user-card">
+            <div className="avatar">
+              {user.name.charAt(0)}
+            </div>
+
+            <h3>{user.name}</h3>
+
+            <p>
+              <strong>Email:</strong> {user.email}
+            </p>
+
+            <p>
+              <strong>Company:</strong> {user.company.name}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
